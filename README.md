@@ -12,6 +12,9 @@ The project has two components:
 	
 - The frontend is a single page application developed with vue.js
 
+sBC is just for searching EBook collections. To create and update such
+collection see [eBC](https://github.com/esb-dev/eBC).
+
 ## License
 
 sBC is licensed under the Eclipse Public License (EPL). It uses libraries 
