@@ -7,7 +7,7 @@ The project has two components:
 - The backend is a RESTful web service developed in Kotlin with the [Javalin](https://javalin.io) framework. It has the following features:
 		
 	- ```http://localhost:7000/collections``` shows which collections of ebooks are available 
-	- ```http://localhost:7000/ebooks?coll=<collection>&query=<lucene-query>``` retrieves the requested book entries in the collection
+	- ```http://localhost:7000/ebooks?coll=<collection>&query=<lucene-query>&num=<numResults>``` retrieves the requested book entries in the collection
 	- ```http://localhost:7000``` is home of a single page application that uses the two web services above
 	
 - The frontend is a single page application developed with vue.js
