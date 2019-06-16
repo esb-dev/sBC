@@ -15,12 +15,16 @@ import us.bpsm.edn.parser.Parsers.defaultConfiguration
 import java.io.File
 
 object Collections {
+    /**
+     * CollEntry has name and path of an ebook collection
+     */
+    data class CollEntry (val name: String, val path : String);
 
     /**
-     * returns basedirs of collections of ebooks as a list of strings
+     * returns basedirs of collections of ebooks as a list of CollEntries
      */
-    fun getCollections(): List<String> {
-        return parseEdn(readFile(configFileName))
+    fun getCollections(): List<CollEntry> {
+        return parseEdn(readFile(configFileName)).map(this::path2collEntry)
     }
 
     private val configFileName = System.getProperty("user.home") + "/.ebcconfig"
@@ -45,4 +49,9 @@ object Collections {
             return emptyList()
         }
     }
+    
+    
+    private fun path2collEntry(path: String) =
+            CollEntry (path.split("/").last(), path)
+    
 } 
