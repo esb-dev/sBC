@@ -14,6 +14,7 @@ import org.apache.lucene.document.Document
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.store.FSDirectory
 import org.apache.lucene.util.Version.LUCENE_44
 import java.nio.file.Paths
@@ -22,26 +23,35 @@ import java.nio.file.Paths
 object QueryProc {
 
     /**
-     *  returns list of BookEntry for the ebooks fulfilling query found in coll 
+     * BookEntry describes ebook
      */
-    fun search(coll: String?, query: String?): List<BookEntry> {
+    data class BookEntry(
+            val path: String,
+            val date: String,
+            val author: String,
+            val title: String,
+            val size: String,
+            val ext: String,
+            val score: Float,
+            val type: String)
+    
+    /**
+     *  returns list of BookEntries for the ebooks fulfilling query found in coll 
+     */
+    fun search(coll: String?, query: String?, num: String?): List<BookEntry> {
         //println("coll: $coll, query: $query")
         val indexDir = coll + "/LuceneIdx"
-        val entries = mutableListOf<BookEntry>()
+        val numResults = num?.toIntOrNull() ?: noResults
         DirectoryReader.open(FSDirectory.open(Paths.get(indexDir).toFile())).use { reader ->
             val searcher = IndexSearcher(reader)
             val analyzer = StandardAnalyzer(LUCENE_44, CharArraySet(LUCENE_44, stopwords, true))
             val qryParser = QueryParser(LUCENE_44, "content", analyzer)
             val qry = qryParser.parse(query)
-            val results = searcher.search(qry, noResults)
-            results.scoreDocs.forEach {
-                //val doc = searcher.doc(it.doc)
-                //val score = it.score
-                //println(doc2book(doc, score))
-                entries.add(doc2book(searcher.doc(it.doc), it.score))
+            val results = searcher.search(qry, numResults)
+            return results.scoreDocs.map {it ->
+                scoreDoc2bookEntry(it, searcher)
             }
         }
-        return entries
     }
 }
 
@@ -68,22 +78,16 @@ private val stopwords = listOf(
         "mein", "sein", "kein",
         "durch", "wegen", "wird")
 
-data class BookEntry(
-        val path: String,
-        val date: String,
-        val author: String,
-        val title: String,
-        val size: String,
-        val ext: String,
-        val score: Float,
-        val type: String)
-
-fun doc2book(doc: Document, score: Float) = BookEntry(
-        doc.get("path"),
-        doc.get("date"),
-        doc.get("author"),
-        doc.get("title"),
-        doc.get("size"),
-        doc.get("ext"),
-        score,
-        doc.get("type"))
+fun scoreDoc2bookEntry(scoreDoc: ScoreDoc, searcher: IndexSearcher): QueryProc.BookEntry {
+    val doc = searcher.doc(scoreDoc.doc)
+    println(doc)
+    return QueryProc.BookEntry(
+            doc.get("path"),
+            doc.get("date"),
+            doc.get("author"),
+            doc.get("title"),
+            doc.get("size"),
+            doc.get("ext"),
+            scoreDoc.score,
+            doc.get("type"))
+}

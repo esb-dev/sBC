@@ -25,7 +25,8 @@ fun main(args: Array<String>) {
 
         get("/ebooks?") { ctx ->
             ctx.json(QueryProc.search(ctx.queryParam("coll"),
-                    ctx.queryParam("query")))
+                    ctx.queryParam("query"),
+                    ctx.queryParam("num")))
         }
     }
 }
