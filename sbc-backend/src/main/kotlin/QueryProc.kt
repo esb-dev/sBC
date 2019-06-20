@@ -80,7 +80,7 @@ private val stopwords = listOf(
 
 fun scoreDoc2bookEntry(scoreDoc: ScoreDoc, searcher: IndexSearcher): QueryProc.BookEntry {
     val doc = searcher.doc(scoreDoc.doc)
-    println(doc)
+    //println(doc)
     return QueryProc.BookEntry(
             doc.get("path"),
             doc.get("date"),
