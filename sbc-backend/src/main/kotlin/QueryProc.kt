@@ -8,16 +8,18 @@
    the terms of this license.
  */
 
+import Collections.getCollBase
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.analysis.util.CharArraySet
-import org.apache.lucene.document.Document
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.store.FSDirectory
 import org.apache.lucene.util.Version.LUCENE_44
+import java.net.URLEncoder
 import java.nio.file.Paths
+import java.text.Normalizer
 
 
 object QueryProc {
@@ -34,13 +36,13 @@ object QueryProc {
             val ext: String,
             val score: Float,
             val type: String)
-    
+
     /**
-     *  returns list of BookEntries for the ebooks fulfilling query found in coll 
+     *  returns list of BookEntries for the ebooks fulfilling query found in coll
      */
     fun search(coll: String?, query: String?, num: String?): List<BookEntry> {
         //println("coll: $coll, query: $query")
-        val indexDir = coll + "/LuceneIdx"
+        val indexDir = getCollBase() + "/" + coll + "/LuceneIdx"
         val numResults = num?.toIntOrNull() ?: noResults
         DirectoryReader.open(FSDirectory.open(Paths.get(indexDir).toFile())).use { reader ->
             val searcher = IndexSearcher(reader)
@@ -48,7 +50,7 @@ object QueryProc {
             val qryParser = QueryParser(LUCENE_44, "content", analyzer)
             val qry = qryParser.parse(query)
             val results = searcher.search(qry, numResults)
-            return results.scoreDocs.map {it ->
+            return results.scoreDocs.map { it ->
                 scoreDoc2bookEntry(it, searcher)
             }
         }
@@ -80,9 +82,11 @@ private val stopwords = listOf(
 
 fun scoreDoc2bookEntry(scoreDoc: ScoreDoc, searcher: IndexSearcher): QueryProc.BookEntry {
     val doc = searcher.doc(scoreDoc.doc)
-    //println(doc)
+    // path must be encoded in fully decomposed tuf-8 for MAC OSX
+    val fullpath = getCollBase() + "/" + doc.get("path");
     return QueryProc.BookEntry(
-            doc.get("path"),
+            URLEncoder.encode(Normalizer.normalize(fullpath, Normalizer.Form.NFD), "UTF-8")
+                    .replace("+", "%20"),
             doc.get("date"),
             doc.get("author"),
             doc.get("title"),

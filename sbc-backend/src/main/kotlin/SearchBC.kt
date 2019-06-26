@@ -10,19 +10,27 @@
 
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
+import io.javalin.core.util.Header
+import io.javalin.staticfiles.Location
 
 fun main(args: Array<String>) {
-
+    
     val app = Javalin.create().apply {
-        exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
+        enableStaticFiles("/public")
+        enableStaticFiles(Collections.getCollBase(), Location.EXTERNAL)
+        exception(Exception::class.java) { e, _ -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("not found") }
-    }.start(7000)
+    }.start()
+    
+    app.before { ctx ->
+        ctx.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+    }
 
     app.routes {
         get("/collections") { ctx ->
             ctx.json(Collections.getCollections())
         }
-
+        
         get("/ebooks?") { ctx ->
             ctx.json(QueryProc.search(ctx.queryParam("coll"),
                     ctx.queryParam("query"),

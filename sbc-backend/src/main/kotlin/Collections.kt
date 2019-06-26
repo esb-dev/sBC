@@ -16,16 +16,21 @@ import java.io.File
 
 object Collections {
     /**
-     * CollEntry has name and path of an ebook collection
+     * CollEntry has text (= name) and value (= index) of an ebook collection
      */
-    data class CollEntry (val name: String, val path : String);
+    data class CollEntry(val text: String, val value: Int)
 
     /**
-     * returns basedirs of collections of ebooks as a list of CollEntries
+     * returns names of collections of ebooks as a list of CollEntries
      */
     fun getCollections(): List<CollEntry> {
-        return parseEdn(readFile(configFileName)).map(this::path2collEntry)
+        return pathList.mapIndexed { index, path -> CollEntry(path2name(path), index) }
     }
+
+    /**
+     * returns base path for all of our collections
+     */
+    fun getCollBase() = pathList.map{ path -> path2base(path) }.first()
 
     private val configFileName = System.getProperty("user.home") + "/.ebcconfig"
 
@@ -44,14 +49,19 @@ object Collections {
                 //println(item)
                 map = item as? Map<Any, Any> ?: HashMap<Any, Any>()
             } while (item != Parser.END_OF_INPUT && map[key] == null)
-            return map.get(key) as? List<String> ?: emptyList()
+            return map[key] as? List<String> ?: emptyList()
         } catch (e: Exception) {
             return emptyList()
         }
     }
     
+    private val pathList = parseEdn(readFile(configFileName))
+
+    private fun path2name(path: String) = path.split("/").last()
     
-    private fun path2collEntry(path: String) =
-            CollEntry (path.split("/").last(), path)
-    
+    private fun path2base(path: String): String {
+        val len = path.length - path2name(path).length - 1
+        return path.take(len)
+    } 
+
 } 
