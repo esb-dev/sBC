@@ -2,7 +2,10 @@
 
 ## Project setup
 ```
-npm install
+npm install axios
+npm install vuex
+npm install bootstrap-vue
+npm install font-awesome
 ```
 
 ### Compiles and hot-reloads for development
@@ -15,9 +18,9 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
+### Deploy
 ```
-npm run test
+deploy
 ```
 
 ### Lints and fixes files

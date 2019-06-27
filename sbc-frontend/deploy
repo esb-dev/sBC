@@ -1,0 +1,1 @@
+cp -R dist/* ../sbc-backend/src/main/resources/public
