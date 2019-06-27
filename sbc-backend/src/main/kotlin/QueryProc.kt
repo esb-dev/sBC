@@ -21,13 +21,13 @@ import java.net.URLEncoder
 import java.nio.file.Paths
 import java.text.Normalizer
 
-
 object QueryProc {
 
     /**
      * BookEntry describes ebook
      */
     data class BookEntry(
+            val idx: Int,
             val path: String,
             val date: String,
             val author: String,
@@ -50,8 +50,8 @@ object QueryProc {
             val qryParser = QueryParser(LUCENE_44, "content", analyzer)
             val qry = qryParser.parse(query)
             val results = searcher.search(qry, numResults)
-            return results.scoreDocs.map { it ->
-                scoreDoc2bookEntry(it, searcher)
+            return results.scoreDocs.mapIndexed { index, it ->
+                scoreDoc2bookEntry(index, it, searcher)
             }
         }
     }
@@ -80,11 +80,13 @@ private val stopwords = listOf(
         "mein", "sein", "kein",
         "durch", "wegen", "wird")
 
-fun scoreDoc2bookEntry(scoreDoc: ScoreDoc, searcher: IndexSearcher): QueryProc.BookEntry {
+fun scoreDoc2bookEntry(index: Int, scoreDoc: ScoreDoc, searcher: IndexSearcher): QueryProc.BookEntry {
     val doc = searcher.doc(scoreDoc.doc)
-    // path must be encoded in fully decomposed tuf-8 for MAC OSX
-    val fullpath = getCollBase() + "/" + doc.get("path");
+    // path must be encoded in fully decomposed utf-8 for MAC OSX
+    //val fullpath = getCollBase() + "/" + doc.get("path");
+    val fullpath = doc.get("path");
     return QueryProc.BookEntry(
+            index,
             URLEncoder.encode(Normalizer.normalize(fullpath, Normalizer.Form.NFD), "UTF-8")
                     .replace("+", "%20"),
             doc.get("date"),
