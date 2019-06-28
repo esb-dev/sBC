@@ -48,6 +48,7 @@ object QueryProc {
             val searcher = IndexSearcher(reader)
             val analyzer = StandardAnalyzer(LUCENE_44, CharArraySet(LUCENE_44, stopwords, true))
             val qryParser = QueryParser(LUCENE_44, "content", analyzer)
+            qryParser.defaultOperator = QueryParser.Operator.AND
             val qry = qryParser.parse(query)
             val results = searcher.search(qry, numResults)
             return results.scoreDocs.mapIndexed { index, it ->
