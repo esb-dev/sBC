@@ -6,6 +6,7 @@
                  title='Settings'
                  header-bg-variant='primary'
                  header-text-variant='light'
+                 :ok-disabled="!isValid"
                  @ok="handleOk">
             <b-form-group label="Modus">
                 <b-form-radio-group
@@ -15,7 +16,10 @@
                 ></b-form-radio-group>
             </b-form-group>
             <label>Number of results</label>
-            <b-form-input v-model="settings.num" type="number"></b-form-input>
+            <b-form-input v-model="settings.num" type="number" :state="isValid"></b-form-input>
+            <b-form-invalid-feedback id="validation">
+                number must be positive
+            </b-form-invalid-feedback>
         </b-modal>
     </div>
 </template>
@@ -32,6 +36,9 @@
             }
         },
         computed: {
+            isValid() {
+                return this.settings.num > 0;
+            },
             settings: {
                 get() {
                     return this.$store.state.settings;
