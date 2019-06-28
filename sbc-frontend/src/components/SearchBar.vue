@@ -2,7 +2,7 @@
     <div>
         <b-input-group>
             <div class="w-20"><b-input-group-text squared slot="prepend">Search Criteria</b-input-group-text></div>
-            <b-form-input v-model="searchcrit" placeholder="Enter search criteria"></b-form-input>
+            <b-form-input v-model="searchcrit" @keyup.enter="search" placeholder="Enter search criteria"></b-form-input>
             <div class="w-10"><b-button block squared @click="search" :disabled="isDisabled">Search</b-button></div>
         </b-input-group>
 

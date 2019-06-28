@@ -5,7 +5,7 @@
             <b-list-group-item button :variant="modevariant" @click="browse(it)" v-for="it in results" v-bind:key="it.idx">
                <p><span class="fa fa-caret-right text-danger" v-if="it.type === 'x'"></span>
                     <span class="fa fa-caret-right text-primary" v-if="it.type === 'b'"></span> {{it.author}}
-                   <span class="font-italic">{{ it.title }}</span><br/>
+                   <span class="font-italic">{{ it.title }}</span>
                    &nbsp;&nbsp;<small>{{it.size}}, {{it.ext}}, {{it.date}}</small></p>
             </b-list-group-item>
         </b-list-group>
