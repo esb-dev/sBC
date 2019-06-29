@@ -1,8 +1,9 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
-# Copyright (c) 2016 by Burkhardt Renz. All rights reserved.
+# Copyright (c) 2019 by Burkhardt Renz. All rights reserved.
 # Makes App for Mac OSX
 # ----------------------------------------------------------------------------
 
 javapackager -deploy -name sBC -appclass SearchBCKt \
-	-native dmg -outdir target -outfile sBC -srcdir ./build/libs -srcfiles sbc-backend-1.0.jar -v
+	-native dmg -outdir target -outfile sBC \
+	-Bicon=sBC.icns -srcdir ./build/libs -srcfiles sbc-backend-1.0.jar -v

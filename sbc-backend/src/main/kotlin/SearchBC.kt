@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
 }
 
 private fun createAndShowGUI() {
-    val GuiFrame = Gui()
+    Gui()
 }
 
 fun startServer() {
