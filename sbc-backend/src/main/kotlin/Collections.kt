@@ -1,5 +1,5 @@
 /* Search eBooks Collection sBC
-   Get basedirs of collections from config file
+   Get collections from config file
 
    Copyright (c) 2019 Burkhardt Renz, THM. All rights reserved.
    The use and distribution terms for this software are covered by the

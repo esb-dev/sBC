@@ -12,10 +12,21 @@ import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
 import io.javalin.core.util.Header
 import io.javalin.staticfiles.Location
+import java.awt.EventQueue
+
+private lateinit var app: Javalin
 
 fun main(args: Array<String>) {
+    EventQueue.invokeLater(::createAndShowGUI)
+}
+
+private fun createAndShowGUI() {
+    val GuiFrame = Gui()
+}
+
+fun startServer() {
     
-    val app = Javalin.create().apply {
+    app = Javalin.create().apply {
         enableStaticFiles("/public")
         enableStaticFiles(Collections.getCollBase(), Location.EXTERNAL)
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
@@ -37,4 +48,8 @@ fun main(args: Array<String>) {
                     ctx.queryParam("num")))
         }
     }
+}
+
+fun stopServer() {
+    app.stop()
 }
