@@ -28,13 +28,14 @@ class Gui{
     private lateinit var stopButton: JButton
     
     val title = "sBC - Search eBook Collections"
+    val rev = "Rev 1.0 2019-07-05"
     
     init {
         prepareGui()
     }
     
     private fun prepareGui() {
-        headerLabel = JLabel("Control sBC Server", JLabel.CENTER)
+        headerLabel = JLabel("This is sBC Server [$rev]", JLabel.CENTER)
         statusLabel = JLabel("", JLabel.CENTER).apply {setSize(200, 50)}
         controlPanel = JPanel().apply {layout = FlowLayout() }
         
