@@ -17,7 +17,7 @@ export default new Vuex.Store({
         settings: {mode: 'l', num: 50}
     },
     actions: {
-        loadCollections({commit}) {
+        loadCollections({commit}) { //deconstructing context.commit
             axios
                 .get(baseUrl + "/collections")
                 .then(r => r.data)

@@ -30,10 +30,11 @@
         methods: {
             search() {
                 // build request
-                let request = "coll=" + this.currname + "&query=" + this.searchcrit.trim() + "&num=" + this.$store.state.settings.num;
+                let request = "coll=" + this.currname + "&query=" + this.searchcrit.trim() + 
+                              "&num=" + this.$store.state.settings.num;
                 this.$store.dispatch('searchBooks', request);
                 // eslint-disable-next-line 
-                console.log(this.$store.state.results);
+                //console.log(this.$store.state.results);
             }
         }
     }
