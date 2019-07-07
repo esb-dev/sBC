@@ -32,7 +32,13 @@ fun startServer() {
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("not found") }
     }.start()
-    
+
+    /*
+    The following setting allows cross-origin resource sharing (CORS).
+    It's useful during development, since for developemt of the frontend
+    another webserver on post 8080 ise used, which sedbs requests to
+    the backend.
+    */
     app.before { ctx ->
         ctx.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
     }

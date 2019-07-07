@@ -51,6 +51,11 @@ object QueryProc {
             qryParser.defaultOperator = QueryParser.Operator.AND
             val qry = qryParser.parse(query)
             val results = searcher.search(qry, numResults)
+            // Test: What happens, when the answer is extremely slow?
+            // Thread.sleep(3_000)
+            // The answer is delayed, but the app stays responsive!
+            // Test end
+            
             return results.scoreDocs.mapIndexed { index, it ->
                 scoreDoc2bookEntry(index, it, searcher)
             }
