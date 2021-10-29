@@ -31,7 +31,7 @@ fun startServer() {
         enableStaticFiles(Collections.getCollBase(), Location.EXTERNAL)
         exception(Exception::class.java) { e, _ -> e.printStackTrace() }
         error(404) { ctx -> ctx.json("not found") }
-    }.start()
+    }.port(7001).start()
 
     /*
     The following setting allows cross-origin resource sharing (CORS).
