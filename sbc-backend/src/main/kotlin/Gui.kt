@@ -28,7 +28,7 @@ class Gui{
     private lateinit var stopButton: JButton
     
     val title = "sBC - Search eBook Collections"
-    val rev = "Rev 1.1 2021-10-29"
+    val rev = "Rev 2.0 2021-11-01"
     
     init {
         prepareGui()

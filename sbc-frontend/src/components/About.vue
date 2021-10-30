@@ -30,8 +30,8 @@
         name: "About",
         data() {
             return {
-                revision: '1.0',
-                date: '2019-07-01'
+                revision: '2.0',
+                date: '2021-11-01'
             }
         },
         methods: {

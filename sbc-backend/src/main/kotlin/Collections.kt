@@ -46,8 +46,8 @@ object Collections {
             val key = newKeyword("basedirs")
             do {
                 item = parser.nextValue(parseable)
-                //println(item)
                 map = item as? Map<Any, Any> ?: HashMap<Any, Any>()
+                // println(map)
             } while (item != Parser.END_OF_INPUT && map[key] == null)
             return map[key] as? List<String> ?: emptyList()
         } catch (e: Exception) {

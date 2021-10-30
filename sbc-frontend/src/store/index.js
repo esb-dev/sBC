@@ -4,7 +4,7 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
-const baseUrl = "http://localhost:7000";
+const baseUrl = "http://localhost:7001";
 
 export { baseUrl } 
 
@@ -17,7 +17,7 @@ export default new Vuex.Store({
         settings: {mode: 'l', num: 50}
     },
     actions: {
-        loadCollections({commit}) { //deconstructing context.commit
+        loadCollections({commit}) { // deconstructing context.commit
             axios
                 .get(baseUrl + "/collections")
                 .then(r => r.data)
